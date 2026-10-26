@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.maven.publish)
     alias(libs.plugins.dokka.javadoc)
+    alias(libs.plugins.maven.publish)
 }
 
 kotlin {

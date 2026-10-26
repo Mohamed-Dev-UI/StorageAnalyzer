@@ -41,6 +41,9 @@ subprojects {
         val ext = extensions.getByType<com.vanniktech.maven.publish.MavenPublishBaseExtension>()
 
         ext.configure(
+            // Modules must apply dokka-javadoc before this plugin: enabling
+            // signing makes signAllPublications() resolve the javadoc task
+            // while the plugin is still being applied.
             com.vanniktech.maven.publish.KotlinJvm(
                 javadocJar = com.vanniktech.maven.publish.JavadocJar.Dokka("dokkaGeneratePublicationJavadoc"),
                 sourcesJar = com.vanniktech.maven.publish.SourcesJar.Sources(),
