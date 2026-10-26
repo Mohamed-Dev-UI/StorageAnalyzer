@@ -1,8 +1,8 @@
 # Storage Analyzer documentation
 
-Current target version: `0.1.0` (development snapshot — no Maven Central
-release yet). The [README](../README.md) is the front door; this directory is
-the reference documentation.
+Current release: `0.1.0` (first tag; published to Maven Central by CI — see
+[RELEASE.md](RELEASE.md)). The [README](../README.md) is the front door; this
+directory is the reference documentation.
 
 ## Start here
 

@@ -10,7 +10,13 @@ process is described in [docs/RELEASE.md](docs/RELEASE.md).
 
 ## [Unreleased]
 
-Target release: `0.1.0`. Nothing has been published to Maven Central yet.
+Nothing in flight. Pre-1.0: minor releases may contain breaking changes, each
+with a migration note here.
+
+## [0.1.0] — 2026-10-26
+
+First release of the Storage Analyzer library, cut from `v0.1.0` and published
+to Maven Central as `io.github.mohamed-dev-ui:storageanalyzer-<module>`.
 
 ### Added
 
@@ -47,8 +53,6 @@ Target release: `0.1.0`. Nothing has been published to Maven Central yet.
 
 ### Known limitations
 
-- No Maven Central release exists yet; use the composite build or
-  `./gradlew publishToMavenLocal` until the first tag is published.
 - `:sqlite` and `:room` require a SQLite JDBC driver (JVM only) and are
   intentionally not shipped in the Android app.
 - See [docs/LIMITATIONS.md](docs/LIMITATIONS.md) for the complete,

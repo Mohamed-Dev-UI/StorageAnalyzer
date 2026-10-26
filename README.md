@@ -5,7 +5,7 @@ Honest, technology-independent storage analytics for the JVM.
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-purple.svg)](https://kotlinlang.org)
 [![JVM](https://img.shields.io/badge/JVM-17%2B-informational.svg)](docs/COMPATIBILITY.md)
-[![Status](https://img.shields.io/badge/status-0.1.0%20pre--release-orange.svg)](#project-status)
+[![Status](https://img.shields.io/badge/status-0.1.0-blue.svg)](#project-status)
 
 Storage Analyzer answers how storage is organized and consumed: what is stored
 where, which resources share physical bytes, how confident each measurement
@@ -20,12 +20,13 @@ its database contents are never counted twice.
 
 ## Project status
 
-**`0.1.0` is a pre-release development version. No Maven Central artifacts
-exist yet.**
+**`0.1.0` is the first release** — cut from the `v0.1.0` tag and published by
+CI to Maven Central as `io.github.mohamed-dev-ui:storageanalyzer-<module>`
+(see [docs/RELEASE.md](docs/RELEASE.md)).
 
-- The first public release is cut by pushing a `v0.1.0` tag (see
-  [docs/RELEASE.md](docs/RELEASE.md)).
-- Until then, consume the current source through a
+- Artifacts appear in the Central search index 10–30 minutes after the publish
+  workflow validates the deployment.
+- To build against unreleased changes, use a
   [composite build](#use-the-current-source-today) or run
   `./gradlew publishToMavenLocal` once and use `mavenLocal()`.
 - The API is pre-1.0: minor releases may contain documented breaking changes.
@@ -72,7 +73,7 @@ See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for the tested matrix.
 
 ## Install
 
-### Maven Central (after the first release)
+### Maven Central
 
 Artifacts are published as
 `io.github.mohamed-dev-ui:storageanalyzer-<module>`. `mavenCentral()` is a
@@ -105,8 +106,9 @@ storageanalyzer-reactive   = { module = "io.github.mohamed-dev-ui:storageanalyze
 storageanalyzer-room       = { module = "io.github.mohamed-dev-ui:storageanalyzer-room",       version.ref = "storageanalyzer" }
 ```
 
-Wait for `0.1.0` to appear on Maven Central after the first tag; the
-[release process](docs/RELEASE.md) documents the timing.
+If `0.1.0` has not indexed yet, check
+[central.sonatype.com](https://central.sonatype.com/search?q=storageanalyzer);
+the [release process](docs/RELEASE.md) documents the timing.
 
 ### Use the current source today
 

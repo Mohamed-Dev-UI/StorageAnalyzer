@@ -6,10 +6,10 @@ test suite.
 
 ## Release status
 
-`0.1.0` is a pre-release development snapshot; no Maven Central artifacts have
-been published yet. The compatibility matrix describes the source tree that
-will produce `0.1.0`. See [RELEASE.md](RELEASE.md) for the publication
-process.
+`0.1.0` is the first release, cut from the `v0.1.0` tag. The compatibility
+matrix describes the source tree that produced it. API is pre-1.0: minor
+releases may contain breaking changes. See [RELEASE.md](RELEASE.md) for the
+publication process.
 
 ## JVM
 

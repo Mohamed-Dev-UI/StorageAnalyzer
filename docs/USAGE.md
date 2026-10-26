@@ -68,11 +68,12 @@ The library is a normal multi-module Gradle/Kotlin project; everything
 targets JVM 17 bytecode. Two supported import modes — **Maven Central**
 (production) and a **composite build** (development against this repo).
 
-### Option A — Import from Maven Central (after the first release)
+### Option A — Import from Maven Central
 
-> **Availability:** no Maven Central artifacts exist yet. `v0.1.0` will be the
-> first published release; until then use Option B or
-> `./gradlew publishToMavenLocal`.
+> **Availability:** `v0.1.0` is the first published release; it is cut by CI
+> from the tag (see [RELEASE.md](RELEASE.md)). If the coordinates do not
+> resolve yet, the deployment is still validating — or use Option B /
+> `./gradlew publishToMavenLocal` to build against current source.
 
 No repository configuration is needed: `mavenCentral()` is one of Gradle's
 default repositories.

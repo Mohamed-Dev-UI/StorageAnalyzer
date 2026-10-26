@@ -2,13 +2,13 @@
 
 ## Supported versions
 
-Storage Analyzer has not published a public release yet. Once `0.1.0` is
-released, security fixes will target the latest `0.x` minor line.
+Storage Analyzer `0.1.0` is the first published release. Security fixes target
+the latest `0.x` minor line.
 
 | Version | Supported |
 |---------|-----------|
-| `0.1.x` | When published |
-| Older   | Not applicable yet |
+| `0.1.x` | Yes       |
+| Older   | None published yet |
 
 ## Reporting a vulnerability
 

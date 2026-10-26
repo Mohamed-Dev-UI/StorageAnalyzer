@@ -73,7 +73,7 @@ subprojects {
             licenses {
                 license {
                     name.set("MIT License")
-                    url.set("https://github.com/Mohamed-Dev-UI/StorageAnalyzer/blob/main/LICENSE")
+                    url.set("https://github.com/Mohamed-Dev-UI/StorageAnalyzer/blob/master/LICENSE")
                 }
             }
 

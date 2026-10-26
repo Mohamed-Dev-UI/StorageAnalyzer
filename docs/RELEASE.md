@@ -3,10 +3,11 @@
 This document defines the process to cut a release of the Storage Analyzer
 library. It is intentionally boring: every step is checkable.
 
-> **Current status:** no version has been tagged or published yet. The
-> pipeline below is configured and dry-run locally; the first tag `v0.1.0`
-> creates the first Maven Central release. Until then, consume the library
-> through a composite build or `publishToMavenLocal` (see
+> **Current status:** `v0.1.0` is the first release tag. The pipeline below is
+> what turns a tag push into a Maven Central release; the one-time setup and
+> the secrets it consumes must exist in the repository before a tag can
+> publish. Consume unreleased source through a composite build or
+> `publishToMavenLocal` (see
 > [COMPATIBILITY.md](COMPATIBILITY.md#release-status)).
 
 ## Versioning
