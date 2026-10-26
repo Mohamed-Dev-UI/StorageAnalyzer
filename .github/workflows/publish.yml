@@ -86,8 +86,22 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
           # make publishToMavenCentral also release the validated deployment
           ORG_GRADLE_PROJECT_mavenCentralAutomaticPublishing: "true"
-        run: >
-          ./gradlew publishToMavenCentral
-          -PpublishVersion=${{ steps.version.outputs.publishVersion }}
-          --no-daemon
-          --stacktrace
+        shell: bash
+        run: |
+          # Actions runs this with -e; the pipeline must survive a Gradle failure
+          # long enough to report it.
+          set +e
+          ./gradlew publishToMavenCentral \
+            -PpublishVersion="${{ steps.version.outputs.publishVersion }}" \
+            --no-daemon \
+            --stacktrace 2>&1 | tee /tmp/gradle-publish.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            # Job logs are admin-only, so the parts that explain the failure are
+            # promoted to annotations. Secret values are masked by Actions.
+            awk '/^\* What went wrong:/{p=1} /^\* Try:/{p=0} p' /tmp/gradle-publish.log \
+              | sed 's/^/::error:: /'
+            grep -Ei 'maven central|portal|signing|gpg|status code|unauthoris|forbidden|namespace' \
+              /tmp/gradle-publish.log | tail -12 | sed 's/^/::error:: /'
+            exit "$status"
+          fi
