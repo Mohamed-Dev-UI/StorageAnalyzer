@@ -58,6 +58,25 @@ jobs:
           echo "publishVersion=$V" >> "$GITHUB_OUTPUT"
           echo "Publishing version: $V"
 
+      # Fails here with a readable message instead of a Central Portal 401 or a
+      # "cannot find signing key" stack trace later in the run.
+      - name: Check publishing secrets
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        shell: bash
+        run: |
+          missing=""
+          [ -z "$MAVEN_CENTRAL_USERNAME" ] && missing="$missing MAVEN_CENTRAL_USERNAME"
+          [ -z "$MAVEN_CENTRAL_PASSWORD" ] && missing="$missing MAVEN_CENTRAL_PASSWORD"
+          [ -z "$GPG_PRIVATE_KEY" ] && missing="$missing GPG_PRIVATE_KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:${missing}"
+            exit 1
+          fi
+          echo "All required publishing secrets are present."
+
       - name: Publish and release to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
