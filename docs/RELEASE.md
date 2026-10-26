@@ -74,7 +74,7 @@ the Maven group.
 | `MAVEN_CENTRAL_USERNAME`  | Portal user-token **username** (step 2 above)                                                                                                                                                        |
 | `MAVEN_CENTRAL_PASSWORD`  | Portal user-token **password** (step 2 above)                                                                                                                                                        |
 | `GPG_PRIVATE_KEY`         | The full ASCII-armored private key from step 3 (multi-line is fine; GitHub secrets support newlines)                                                                                                  |
-| `GPG_KEY_ID`              | (optional) the last 8 hex chars of the key fingerprint — leave empty if the private key contains only one key                                                                                         |
+| `GPG_KEY_ID`              | (optional) the last 8 hex chars of the key fingerprint — a full fingerprint is reduced to its last 8 hex chars by the workflow, and an unusable value is dropped so Gradle derives the id from the private key |
 | `GPG_PASSPHRASE`          | (optional) the key's passphrase — leave empty if your key has none                                                                                                                                    |
 
 They are consumed by the workflow as Gradle properties via the

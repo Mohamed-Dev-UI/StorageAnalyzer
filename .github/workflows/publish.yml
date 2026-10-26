@@ -10,7 +10,9 @@
 #   MAVEN_CENTRAL_USERNAME   Central Portal user token "username"
 #   MAVEN_CENTRAL_PASSWORD   Central Portal user token "password"
 #   GPG_PRIVATE_KEY          ASCII-armored private key (gpg --export-secret-keys --armor <id>)
-#   GPG_KEY_ID               (optional) short key id of the signing key
+#   GPG_KEY_ID               (optional) signing key id; a full fingerprint is
+#                            reduced to its last 8 hex chars, unusable values
+#                            are dropped so Gradle derives the id itself
 #   GPG_PASSPHRASE           (optional) passphrase of the signing key
 name: Publish to Maven Central
 
@@ -77,24 +79,48 @@ jobs:
           fi
           echo "All required publishing secrets are present."
 
+      # Gradle accepts only the 8-hex short key id ("0x567B0D87"): a full
+      # fingerprint, a 16-hex long id and an empty value all fail task
+      # configuration. Anything unusable is dropped so Gradle derives the id
+      # from the private key itself.
+      - name: Resolve signing key id
+        id: keyid
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+        shell: bash
+        run: |
+          id="${GPG_KEY_ID//[[:space:]]/}"
+          id="${id#0[Xx]}"
+          case "$id" in
+            *[!0-9A-Fa-f]*) id="" ;;
+          esac
+          if [ "${#id}" -gt 8 ]; then id="${id: -8}"; fi
+          if [ -z "$id" ]; then
+            echo "::warning::GPG_KEY_ID is not a hex key id; deriving it from the private key instead."
+          fi
+          echo "value=$id" >> "$GITHUB_OUTPUT"
+          echo "Signing key id: ${id:-<derived from private key>}"
+
       - name: Publish and release to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
           # make publishToMavenCentral also release the validated deployment
           ORG_GRADLE_PROJECT_mavenCentralAutomaticPublishing: "true"
+          SIGNING_KEY_ID: ${{ steps.keyid.outputs.value }}
+          PUBLISH_VERSION: ${{ steps.version.outputs.publishVersion }}
         shell: bash
         run: |
           # Actions runs this with -e; the pipeline must survive a Gradle failure
           # long enough to report it.
           set +e
-          ./gradlew publishToMavenCentral \
-            -PpublishVersion="${{ steps.version.outputs.publishVersion }}" \
-            --no-daemon \
-            --stacktrace 2>&1 | tee /tmp/gradle-publish.log
+          args=(publishToMavenCentral "-PpublishVersion=$PUBLISH_VERSION" --no-daemon --stacktrace)
+          if [ -n "$SIGNING_KEY_ID" ]; then
+            args+=("-PsigningInMemoryKeyId=$SIGNING_KEY_ID")
+          fi
+          ./gradlew "${args[@]}" 2>&1 | tee /tmp/gradle-publish.log
           status=${PIPESTATUS[0]}
           if [ "$status" -ne 0 ]; then
             # Job logs are admin-only, so the parts that explain the failure are
